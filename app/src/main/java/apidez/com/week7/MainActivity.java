@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         RxTextView.textChangeEvents(edtSearch)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
-                .map(event -> event.text().toString())
+                .map(event -> event.text())
+                .map(charSequence -> charSequence.toString())
+                .filter(value -> !value.isEmpty())
                 .flatMap(keyword -> search(keyword))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
